@@ -1,10 +1,12 @@
-import { Fragment } from "react";
+import { Fragment, useContext } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import {
   Bars3Icon,
   XMarkIcon,
   ShoppingCartIcon,
 } from "@heroicons/react/24/outline";
+import profile from "../images/profile.png";
+import { RoomContext } from "../Context";
 
 const navigation = [
   { name: "Collection", href: "#", current: false },
@@ -19,6 +21,7 @@ function classNames(...classes) {
 }
 
 const Navbar = () => {
+  const { saved } = useContext(RoomContext);
   return (
     <Disclosure as="nav" className="bg-white">
       {({ open }) => (
@@ -74,13 +77,13 @@ const Navbar = () => {
                 {/* Profile dropdown */}
                 <Menu as="div" className="relative ml-3 ">
                   <div>
-                    <Menu.Button className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-[#FF7D1A]">
+                    <Menu.Button className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF7D1A] focus:ring-offset-2 focus:ring-offset-[#FF7D1A]">
                       <span className="absolute -inset-1.5" />
                       <span className="sr-only">Open user menu</span>
                       <img
                         className="h-8 w-8 rounded-full "
-                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                        alt=""
+                        src={profile}
+                        alt="Profile pic"
                       />
                     </Menu.Button>
                   </div>
@@ -103,6 +106,7 @@ const Navbar = () => {
                               "block px-4 py-2 border-b text-sm text-gray-700"
                             )}
                           >
+                            <h2 className="italic-font">{saved.length}</h2>
                             Cart
                           </a>
                         )}
