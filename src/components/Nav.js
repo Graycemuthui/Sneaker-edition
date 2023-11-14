@@ -1,4 +1,4 @@
-import { Fragment, useContext } from "react";
+import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import {
   Bars3Icon,
@@ -6,7 +6,7 @@ import {
   ShoppingCartIcon,
 } from "@heroicons/react/24/outline";
 import profile from "../images/profile.png";
-import { RoomContext } from "../Context";
+import Cart from "../pages/Cart";
 
 const navigation = [
   { name: "Collection", href: "#", current: false },
@@ -21,7 +21,6 @@ function classNames(...classes) {
 }
 
 const Navbar = () => {
-  const { saved } = useContext(RoomContext);
   return (
     <Disclosure as="nav" className="bg-white">
       {({ open }) => (
@@ -96,35 +95,24 @@ const Navbar = () => {
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
                   >
-                    <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                      <Menu.Item>
-                        {({ active }) => (
-                          <a
-                            href="/#"
-                            className={classNames(
-                              active ? "bg-white" : "",
-                              "block px-4 py-2 border-b text-sm text-gray-700"
-                            )}
-                          >
-                            <h2 className="italic-font">{saved.length}</h2>
-                            Cart
-                          </a>
-                        )}
-                      </Menu.Item>
-                      <Menu.Item>
-                        {({ active }) => (
-                          <a
-                            href="/#"
-                            className={classNames(
-                              active ? "bg-white" : "",
-                              "block px-10 py-10 text-sm text-gray-700"
-                            )}
-                          >
-                            No items in your cart
-                          </a>
-                        )}
-                      </Menu.Item>
-                    </Menu.Items>
+                    <div className="w-full">
+                      <Menu.Items className="absolute right-0 z-10 mt-2 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                        <Menu.Item>
+                          {({ active }) => (
+                            <a
+                              href="/#"
+                              className={classNames(
+                                active ? "bg-white" : "",
+                                "block px-4 py-1 border-b text-sm font-bold text-start text-black"
+                              )}
+                            >
+                              Cart
+                            </a>
+                          )}
+                        </Menu.Item>
+                        <Cart />
+                      </Menu.Items>
+                    </div>
                   </Transition>
                 </Menu>
               </div>

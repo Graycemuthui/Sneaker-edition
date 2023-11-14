@@ -1,6 +1,20 @@
+import React, { useContext, useState } from "react";
 import { product } from "../pages/Productdata.js";
+import { RoomContext } from "../Context";
+import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 
 const Product = () => {
+  const [counter, setCounter] = useState(0);
+  const { addCart } = useContext(RoomContext);
+
+  const handleClick1 = () => {
+    setCounter(counter + 1);
+  };
+
+  const handleClick2 = () => {
+    setCounter(counter - 1);
+  };
+
   return (
     <div className="bg-white">
       <div className="pt-6">
@@ -44,7 +58,7 @@ const Product = () => {
             </div>
           </div>
           {/* Description and details */}
-          <div className="pt-10 text-start">
+          <div className="pt-1 text-start">
             <h3 className="text-sm font-bold  text-[#FF7D1A]">
               SNEAKER COMPANY
             </h3>
@@ -65,13 +79,31 @@ const Product = () => {
               </div>
               <p className="text-md text-gray-500 line-through"> $250.00</p>
             </div>
-            <div className="mt-4">
+            <div className="mt-8">
               <div className="flex flex-row gap-4">
-                <button className="bg-[#FF7D1A] text-white px-4 py-2 rounded-lg hover:bg-[#FF7D1A] hover:text-white">
+                <div className="flex flex-row gap-6 text-center bg-gray-100 px-4 py-2 rounded-lg content-center">
+                  <button
+                    onClick={handleClick2}
+                    className="text-2xl text-[#FF7D1A]"
+                  >
+                    -
+                  </button>
+                  <p className="text-md content-center text-center text-black">
+                    {counter}
+                  </p>
+                  <button
+                    onClick={handleClick1}
+                    className="text-2xl text-[#FF7D1A]"
+                  >
+                    +
+                  </button>
+                </div>
+                <button
+                  onClick={() => addCart(product)}
+                  className="bg-[#FF7D1A] text-white px-8 py-2 rounded-lg hover:bg-[#FF7D1A] hover:text-white flex flex-row gap-2"
+                >
+                  <ShoppingCartIcon className="h-6 w-6" aria-hidden="true" />
                   Add to cart
-                </button>
-                <button className="bg-[#FFEDE0] text-[#FF7D1A] px-4 py-2 rounded-lg hover:bg-[#FFEDE0] hover:text-[#FF7D1A]">
-                  Add to favorites
                 </button>
               </div>
             </div>
