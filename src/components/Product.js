@@ -73,7 +73,7 @@ const Product = () => {
             <div className="mt-4">
               <div className=" flex flex-row gap-4 text-center">
                 <p className="text-2xl tracking-tight text-gray-900">
-                  {product.price}
+                  ${product.price}
                 </p>
                 <p className="text-md bg-[#FFEDE0] text-[#FF7D1A] px-1">50%</p>
               </div>

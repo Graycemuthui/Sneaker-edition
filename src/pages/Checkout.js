@@ -1,18 +1,25 @@
 import React, { useContext, useEffect, useState } from "react";
 import { RoomContext } from "../Context";
-import { Link } from "react-router-dom";
 import { product } from "./Productdata";
 
 function Checkout() {
   const { saved } = useContext(RoomContext);
   const { removeFromArray } = useContext(RoomContext);
   const [totalPrice, setTotalPrice] = useState(0);
-
   useEffect(() => {
     if (saved.length > 0) {
       let total = 0;
-      saved.forEach((product) => {
-        total += Number(product.product_price);
+      saved.forEach((products) => {
+        if (product.price && !isNaN(product.price)) {
+          const price = parseFloat(product.price);
+          if (!isNaN(price)) {
+            total += price;
+          } else {
+            console.log("Invalid price (NaN) for product:", product);
+          }
+        } else {
+          console.log("Invalid or missing price for product:", product);
+        }
       });
       setTotalPrice(total);
     }
@@ -23,20 +30,20 @@ function Checkout() {
       <div className="overflow-x-auto">
         <div className="p-1.5 w-full inline-block align-middle">
           <div className="overflow-hidden border rounded-lg">
-            <table className="min-w-full divide-y divide-gray-200">
+            <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
               <thead className="bg-gray-50">
                 <tr>
                   <th
                     scope="col"
                     className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
                   >
-                    Image
+                    Sneakers
                   </th>
                   <th
                     scope="col"
                     className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
                   >
-                    Product
+                    Name
                   </th>
                   <th
                     scope="col"
@@ -47,12 +54,12 @@ function Checkout() {
                 </tr>
               </thead>
               {saved.map((products) => (
-                <tbody className="divide-y divide-gray-200">
+                <tbody className="divide-y divide-gray-200" key={product.id}>
                   <tr>
                     <td className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
                       <img
-                        src={product.images.src}
-                        alt={product.images.alt}
+                        src={product.images[0].src}
+                        alt={product.images[0].alt}
                         className="h-12 w-12 object-cover object-center rounded-lg"
                       />
                     </td>
@@ -61,11 +68,6 @@ function Checkout() {
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
                       {product.price}
-                    </td>
-                    <td className="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
-                      <Link className="text-decoration-none text-dark fw-bold">
-                        View Product
-                      </Link>
                     </td>
                   </tr>
                 </tbody>

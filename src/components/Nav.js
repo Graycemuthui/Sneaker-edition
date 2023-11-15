@@ -95,24 +95,25 @@ const Navbar = () => {
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
                   >
-                    <div className="w-full">
-                      <Menu.Items className="absolute right-0 z-10 mt-2 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                        <Menu.Item>
-                          {({ active }) => (
-                            <a
-                              href="/#"
-                              className={classNames(
-                                active ? "bg-white" : "",
-                                "block px-4 py-1 border-b text-sm font-bold text-start text-black"
-                              )}
-                            >
-                              Cart
-                            </a>
-                          )}
-                        </Menu.Item>
-                        <Cart />
-                      </Menu.Items>
-                    </div>
+                    <Menu.Items
+                      className="absolute  right-0 z-10 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                      style={{ width: "300px" }}
+                    >
+                      <Menu.Item>
+                        {({ active }) => (
+                          <a
+                            href="/#"
+                            className={classNames(
+                              active ? "bg-white" : "",
+                              "block px-4 py-1 border-b text-sm font-bold text-start text-black"
+                            )}
+                          >
+                            Cart
+                          </a>
+                        )}
+                      </Menu.Item>
+                      <Cart />
+                    </Menu.Items>
                   </Transition>
                 </Menu>
               </div>
