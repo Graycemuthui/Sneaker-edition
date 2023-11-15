@@ -1,29 +1,9 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { RoomContext } from "../Context";
 import { product } from "./Productdata";
 
 function Checkout() {
-  const { saved } = useContext(RoomContext);
-  const { removeFromArray } = useContext(RoomContext);
-  const [totalPrice, setTotalPrice] = useState(0);
-  useEffect(() => {
-    if (saved.length > 0) {
-      let total = 0;
-      saved.forEach((products) => {
-        if (product.price && !isNaN(product.price)) {
-          const price = parseFloat(product.price);
-          if (!isNaN(price)) {
-            total += price;
-          } else {
-            console.log("Invalid price (NaN) for product:", product);
-          }
-        } else {
-          console.log("Invalid or missing price for product:", product);
-        }
-      });
-      setTotalPrice(total);
-    }
-  }, [saved]);
+  const { saved, totalPriceWithQuantity } = useContext(RoomContext);
 
   return (
     <div className="flex flex-col">
@@ -74,12 +54,12 @@ function Checkout() {
               ))}
             </table>
             <div className="d-flex justify-center my-3">
-              <h3>Total Price: ${totalPrice}</h3>
+              <h3>Total Price: ${totalPriceWithQuantity}</h3>
               <div className="flex gap-4 justify-center">
                 <button
                   className="bg-[#FF7D1A] text-white px-8 py-2 rounded-lg hover:bg-[#FF7D1A] hover:text-white"
                   onClick={() => {
-                    if (totalPrice > 0)
+                    if (totalPriceWithQuantity > 0)
                       alert(
                         "Thank you for shopping with us! Your order has been placed."
                       );
@@ -87,12 +67,6 @@ function Checkout() {
                   }}
                 >
                   Checkout
-                </button>
-                <button
-                  onClick={() => removeFromArray(product.id)}
-                  className="bg-[#FF7D1A] text-white px-8 py-2 rounded-lg hover:bg-[#FF7D1A] hover:text-white"
-                >
-                  Remove
                 </button>
               </div>
             </div>

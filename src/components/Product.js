@@ -8,11 +8,13 @@ const Product = () => {
   const { addCart } = useContext(RoomContext);
 
   const handleClick1 = () => {
-    setCounter(counter + 1);
+    setCounter((prevCounter) => prevCounter + 1);
   };
 
   const handleClick2 = () => {
-    setCounter(counter - 1);
+    if (counter > 0) {
+      setCounter((prevCounter) => prevCounter - 1);
+    }
   };
 
   return (
@@ -24,35 +26,35 @@ const Product = () => {
             <img
               src={product.images[0].src}
               alt={product.images[0].alt}
-              className="h-3/4 w-4/9 object-cover object-center rounded-lg"
+              className="h-3/4 w-4/9 object-cover object-center rounded-lg "
             />
             <div className=" lg:grid lg:grid-cols-4 lg:gap-y-4 gap-3 pt-9">
               <div className="aspect-h-2 aspect-w-2 overflow-hidden rounded-lg">
                 <img
                   src={product.images[1].src}
                   alt={product.images[1].alt}
-                  className="h-full w-full object-cover object-center"
+                  className="h-full w-full object-cover object-center hover:blur-sm"
                 />
               </div>
               <div className="aspect-h-2 aspect-w-2 overflow-hidden rounded-lg">
                 <img
                   src={product.images[2].src}
                   alt={product.images[2].alt}
-                  className="h-full w-full object-cover object-center"
+                  className="h-full w-full object-cover object-center hover:blur-sm"
                 />
               </div>
               <div className="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg">
                 <img
                   src={product.images[4].src}
                   alt={product.images[4].alt}
-                  className="h-full w-full object-cover object-center"
+                  className="h-full w-full object-cover object-center hover:blur-sm"
                 />
               </div>
               <div className="aspect-h-5 aspect-w-4 lg:aspect-h-4 lg:aspect-w-3 sm:overflow-hidden sm:rounded-lg">
                 <img
                   src={product.images[6].src}
                   alt={product.images[6].alt}
-                  className="h-full w-full object-cover object-center"
+                  className="h-full w-full object-cover object-center hover:blur-sm"
                 />
               </div>
             </div>
