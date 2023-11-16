@@ -1,44 +1,54 @@
 import React, { createContext, useState } from "react";
+
 export const RoomContext = createContext();
 
 export function RoomProvider({ children }) {
-  const [counter, setCounter] = useState(0);
+  const [counter, setCounter] = useState({});
   const [saved, setSaved] = useState([]);
 
   const addCart = (product) => {
-    setSaved((prevCart) => [...prevCart, product]);
-    setCounter((prevCounter) => ({
-      ...prevCounter,
-      [product.id]: (prevCounter[product.id] || 0) + 1,
-    }));
-  };
+    setSaved((prevState) => {
+      const existingProductIndex = prevState.findIndex(
+        (p) => p.id === product.id
+      );
 
-  const removeFromArray = (objectid) => {
-    setSaved((prevState) =>
-      prevState.filter((product) => product.id !== objectid)
-    );
+      if (existingProductIndex !== -1) {
+        return [...prevState];
+      } else {
+        return [...prevState, { ...product, quantity: 1 }];
+      }
+    });
     setCounter((prevCounter) => {
       const newCounter = { ...prevCounter };
-      delete newCounter[objectid];
+      newCounter[product.id] = 2;
+      return newCounter;
+    });
+  };
+  const removeFromArray = (objectid) => {
+    setSaved((prevState) =>
+      prevState.map((product) =>
+        product.id === objectid
+          ? { ...product, quantity: Math.max(0, product.quantity - 1) }
+          : product
+      )
+    );
+
+    setCounter((prevCounter) => {
+      const newCounter = { ...prevCounter };
+      newCounter[objectid] = Math.max(0, (newCounter[objectid] || 0) - 1);
       return newCounter;
     });
   };
 
-  const totalPriceWithQuantity = (product) => {
+  const totalPriceWithQuantity = () => {
     let totalPrice = 0;
 
-    console.log("Counter state:", counter);
-
-    if (product.id && product.price && !isNaN(product.price)) {
+    saved.forEach((product) => {
       const price = parseFloat(product.price);
-      if (!isNaN(price)) {
-        totalPrice += price * (counter[product.id] || 0);
-      } else {
-        console.log("Invalid price (NaN) for product:", product);
-      }
-    } else {
-      console.log("Invalid or missing id/price for product:", product);
-    }
+      const quantity = counter[product.id] || 0;
+      totalPrice += price * quantity;
+    });
+
     return totalPrice;
   };
 
@@ -56,4 +66,3 @@ export function RoomProvider({ children }) {
     </RoomContext.Provider>
   );
 }
-export const RoomConsumer = RoomContext.Consumer;

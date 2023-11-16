@@ -1,20 +1,17 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { product } from "../pages/Productdata.js";
 import { RoomContext } from "../Context";
 import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 
 const Product = () => {
-  const [counter, setCounter] = useState(0);
-  const { addCart } = useContext(RoomContext);
+  const { addCart, counter, removeFromArray } = useContext(RoomContext);
 
-  const handleClick1 = () => {
-    setCounter((prevCounter) => prevCounter + 1);
+  const handleIncrement = () => {
+    addCart(product);
   };
 
-  const handleClick2 = () => {
-    if (counter > 0) {
-      setCounter((prevCounter) => prevCounter - 1);
-    }
+  const handleDecrement = () => {
+    removeFromArray(product.id);
   };
 
   return (
@@ -85,16 +82,16 @@ const Product = () => {
               <div className="flex flex-row gap-4">
                 <div className="flex flex-row gap-6 text-center bg-gray-100 px-4 py-2 rounded-lg content-center">
                   <button
-                    onClick={handleClick2}
+                    onClick={handleDecrement}
                     className="text-2xl text-[#FF7D1A]"
                   >
                     -
                   </button>
                   <p className="text-md content-center text-center text-black">
-                    {counter}
+                    {counter[product.id] || 0}
                   </p>
                   <button
-                    onClick={handleClick1}
+                    onClick={handleIncrement}
                     className="text-2xl text-[#FF7D1A]"
                   >
                     +
