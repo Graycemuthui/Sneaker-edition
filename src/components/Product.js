@@ -1,10 +1,14 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { product } from "../pages/Productdata.js";
 import { RoomContext } from "../Context";
 import { ShoppingCartIcon } from "@heroicons/react/24/outline";
+import Lightbox from "lightbox.js-react";
+import "lightbox.js-react/style.css"; // Don't forget to import the styles
 
 const Product = () => {
   const { addCart, counter, removeFromArray } = useContext(RoomContext);
+  const [photoIndex, setPhotoIndex] = useState(0);
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
 
   const handleIncrement = () => {
     addCart(product);
@@ -12,6 +16,15 @@ const Product = () => {
 
   const handleDecrement = () => {
     removeFromArray(product.id);
+  };
+
+  const openLightbox = (index) => {
+    setPhotoIndex(index);
+    setIsLightboxOpen(true);
+  };
+
+  const closeLightbox = () => {
+    setIsLightboxOpen(false);
   };
 
   return (
@@ -28,6 +41,7 @@ const Product = () => {
             <div className=" lg:grid lg:grid-cols-4 lg:gap-y-4 gap-3 pt-9">
               <div className="aspect-h-2 aspect-w-2 overflow-hidden rounded-lg">
                 <img
+                  onClick={() => openLightbox(1)}
                   src={product.images[1].src}
                   alt={product.images[1].alt}
                   className="h-full w-full object-cover object-center hover:blur-sm"
@@ -35,6 +49,7 @@ const Product = () => {
               </div>
               <div className="aspect-h-2 aspect-w-2 overflow-hidden rounded-lg">
                 <img
+                  onClick={() => openLightbox(2)}
                   src={product.images[2].src}
                   alt={product.images[2].alt}
                   className="h-full w-full object-cover object-center hover:blur-sm"
@@ -42,6 +57,7 @@ const Product = () => {
               </div>
               <div className="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg">
                 <img
+                  onClick={() => openLightbox(4)}
                   src={product.images[4].src}
                   alt={product.images[4].alt}
                   className="h-full w-full object-cover object-center hover:blur-sm"
@@ -49,12 +65,37 @@ const Product = () => {
               </div>
               <div className="aspect-h-5 aspect-w-4 lg:aspect-h-4 lg:aspect-w-3 sm:overflow-hidden sm:rounded-lg">
                 <img
+                  onClick={() => openLightbox(6)}
                   src={product.images[6].src}
                   alt={product.images[6].alt}
                   className="h-full w-full object-cover object-center hover:blur-sm"
                 />
               </div>
             </div>
+            {isLightboxOpen && (
+              <Lightbox
+                mainSrc={product.images[photoIndex].src}
+                nextSrc={
+                  product.images[(photoIndex + 1) % product.images.length].src
+                }
+                prevSrc={
+                  product.images[
+                    (photoIndex + product.images.length - 1) %
+                      product.images.length
+                  ].src
+                }
+                onCloseRequest={closeLightbox}
+                onMovePrevRequest={() =>
+                  setPhotoIndex(
+                    (photoIndex + product.images.length - 1) %
+                      product.images.length
+                  )
+                }
+                onMoveNextRequest={() =>
+                  setPhotoIndex((photoIndex + 1) % product.images.length)
+                }
+              />
+            )}
           </div>
           {/* Description and details */}
           <div className="pt-1 text-start">
