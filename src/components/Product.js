@@ -1,14 +1,13 @@
 import React, { useContext, useState } from "react";
 import { product } from "../pages/Productdata.js";
 import { RoomContext } from "../Context";
-import { ShoppingCartIcon } from "@heroicons/react/24/outline";
-import Lightbox from "lightbox.js-react";
-import "lightbox.js-react/style.css"; // Don't forget to import the styles
+import { ShoppingCartIcon, XMarkIcon } from "@heroicons/react/24/outline";
 
 const Product = () => {
   const { addCart, counter, removeFromArray } = useContext(RoomContext);
-  const [photoIndex, setPhotoIndex] = useState(0);
-  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [setCurrentImageIndex] = useState(0);
 
   const handleIncrement = () => {
     addCart(product);
@@ -18,15 +17,31 @@ const Product = () => {
     removeFromArray(product.id);
   };
 
-  const openLightbox = (index) => {
-    setPhotoIndex(index);
-    setIsLightboxOpen(true);
+  const openModal = (image, index) => {
+    setSelectedImage(image);
+    setCurrentImageIndex(index);
+    setIsModalOpen(true);
   };
 
-  const closeLightbox = () => {
-    setIsLightboxOpen(false);
+  const closeModal = () => {
+    setSelectedImage(null);
+    setIsModalOpen(false);
   };
 
+  const handleNextImage = () => {
+    console.log("Next image clicked");
+    setCurrentImageIndex(
+      (prevIndex) => (prevIndex + 1) % product.images.length
+    );
+  };
+
+  const handlePrevImage = () => {
+    console.log("Previous image clicked");
+    setCurrentImageIndex(
+      (prevIndex) =>
+        (prevIndex - 1 + product.images.length) % product.images.length
+    );
+  };
   return (
     <div className="bg-white">
       <div className="pt-6">
@@ -39,64 +54,83 @@ const Product = () => {
               className="h-3/4 w-4/9 object-cover object-center rounded-lg "
             />
             <div className=" lg:grid lg:grid-cols-4 lg:gap-y-4 gap-3 pt-9">
-              <div className="aspect-h-2 aspect-w-2 overflow-hidden rounded-lg">
-                <img
-                  onClick={() => openLightbox(1)}
-                  src={product.images[1].src}
-                  alt={product.images[1].alt}
-                  className="h-full w-full object-cover object-center hover:blur-sm"
-                />
-              </div>
-              <div className="aspect-h-2 aspect-w-2 overflow-hidden rounded-lg">
-                <img
-                  onClick={() => openLightbox(2)}
-                  src={product.images[2].src}
-                  alt={product.images[2].alt}
-                  className="h-full w-full object-cover object-center hover:blur-sm"
-                />
-              </div>
-              <div className="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg">
-                <img
-                  onClick={() => openLightbox(4)}
-                  src={product.images[4].src}
-                  alt={product.images[4].alt}
-                  className="h-full w-full object-cover object-center hover:blur-sm"
-                />
-              </div>
-              <div className="aspect-h-5 aspect-w-4 lg:aspect-h-4 lg:aspect-w-3 sm:overflow-hidden sm:rounded-lg">
-                <img
-                  onClick={() => openLightbox(6)}
-                  src={product.images[6].src}
-                  alt={product.images[6].alt}
-                  className="h-full w-full object-cover object-center hover:blur-sm"
-                />
-              </div>
+              {product.images
+                .filter((image, index) => index % 2 === 0)
+                .map((image, index) => (
+                  <img
+                    key={index}
+                    src={image.src}
+                    alt={image.alt}
+                    className="h-20 w-20 object-cover object-center rounded-lg cursor-pointer"
+                    onClick={() => openModal(image.src, image.id)}
+                  />
+                ))}
             </div>
-            {isLightboxOpen && (
-              <Lightbox
-                mainSrc={product.images[photoIndex].src}
-                nextSrc={
-                  product.images[(photoIndex + 1) % product.images.length].src
-                }
-                prevSrc={
-                  product.images[
-                    (photoIndex + product.images.length - 1) %
-                      product.images.length
-                  ].src
-                }
-                onCloseRequest={closeLightbox}
-                onMovePrevRequest={() =>
-                  setPhotoIndex(
-                    (photoIndex + product.images.length - 1) %
-                      product.images.length
-                  )
-                }
-                onMoveNextRequest={() =>
-                  setPhotoIndex((photoIndex + 1) % product.images.length)
-                }
-              />
+
+            {/* Modal */}
+            {isModalOpen && (
+              <div className="fixed z-10 inset-0 overflow-y-auto">
+                <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                  {/* Background overlay, show/hide based on modal state. */}
+                  <div
+                    className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+                    aria-hidden="true"
+                  ></div>
+
+                  <div>
+                    <button
+                      onClick={handlePrevImage}
+                      className="absolute bottom-80 left-80 bg-white text-[#FF7D1A] p-2 rounded-full cursor-pointer z-10"
+                    >
+                      {"<"}
+                    </button>
+
+                    <button
+                      onClick={handleNextImage}
+                      className="absolute bottom-80 right-80 bg-white text-[#FF7D1A] p-2 rounded-full cursor-pointer z-10"
+                    >
+                      {">"}
+                    </button>
+                  </div>
+
+                  {/* This element is to trick the browser into centering the modal contents. */}
+                  <span
+                    className="hidden sm:inline-block sm:align-middle sm:h-screen"
+                    aria-hidden="true"
+                  >
+                    &#8203;
+                  </span>
+                  {/* Modal panel, show/hide based on modal state. */}
+
+                  <div
+                    className="inline-block align-bottom rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+                    role="dialog"
+                    aria-modal="true"
+                    aria-labelledby="modal-headline"
+                  >
+                    <div className="sm:px-6 sm:flex sm:flex-row-reverse">
+                      <XMarkIcon
+                        onClick={closeModal}
+                        className="h-6 w-6 text-[#FF7D1A] cursor-pointer"
+                      />
+                    </div>
+
+                    {/* Image */}
+                    <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                      <div className="mt-2">
+                        <img
+                          src={selectedImage}
+                          alt="modal"
+                          className="h-3/4 w-4/9 object-cover object-center rounded-lg "
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             )}
           </div>
+
           {/* Description and details */}
           <div className="pt-1 text-start">
             <h3 className="text-sm font-bold  text-[#FF7D1A]">
