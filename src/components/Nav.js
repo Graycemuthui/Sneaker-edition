@@ -52,8 +52,8 @@ const Navbar = () => {
                         className={classNames(
                           item.current
                             ? "bg-orange-900 text-white"
-                            : "text-gray-300 hover:text-black hover:underline underline-offset-8 decoration-4 decoration-[#FF7D1A] decoration-solid",
-                          "rounded-md px-3 py-2 text-sm font-large"
+                            : "text-gray-300 hover:text-black hover:underline underline-offset-8 decoration-4 decoration-[#FF7D1A] decoration-solid sm:text-lg",
+                          "rounded-md px-3 py-2 text-sm font-large "
                         )}
                         aria-current={item.current ? "page" : undefined}
                       >

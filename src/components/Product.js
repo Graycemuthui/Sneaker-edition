@@ -46,25 +46,27 @@ const Product = () => {
     <div className="bg-white">
       <div className="pt-6">
         {/* Image gallery */}
-        <div className="mx-auto max-w-2xl px-4 pt-10 sm:px-6 sm:pt-18 lg:grid lg:max-w-4xl lg:grid-cols-2 lg:grid-rows-[auto,auto,1fr] lg:gap-x-10 lg:px-8 lg:pb-24 ">
+        <div className="mx-auto max-w-2xl px-4 lg:grid lg:max-w-4xl lg:grid-cols-2 lg:grid-rows-[auto,auto,1fr] lg:gap-x-10 lg:px-8 lg:pb-24 ">
           <div className=" aspect-h-4 aspect-w-4 rounded-lg lg:block">
             <img
               src={product.images[0].src}
               alt={product.images[0].alt}
               className="h-3/4 w-4/9 object-cover object-center rounded-lg "
             />
-            <div className=" lg:grid lg:grid-cols-4 lg:gap-y-4 gap-3 pt-9">
-              {product.images
-                .filter((image, index) => index % 2 === 0)
-                .map((image, index) => (
-                  <img
-                    key={index}
-                    src={image.src}
-                    alt={image.alt}
-                    className="h-20 w-20 object-cover object-center rounded-lg cursor-pointer"
-                    onClick={() => openModal(image.src, image.id)}
-                  />
-                ))}
+            <div className="hidden lg:block">
+              <div className=" lg:grid lg:grid-cols-4 lg:gap-y-4 gap-3 pt-9 ">
+                {product.images
+                  .filter((image, index) => index % 2 === 0)
+                  .map((image, index) => (
+                    <img
+                      key={index}
+                      src={image.src}
+                      alt={image.alt}
+                      className="h-20 w-20 object-cover object-center rounded-lg cursor-pointer"
+                      onClick={() => openModal(image.src, image.id)}
+                    />
+                  ))}
+              </div>
             </div>
 
             {/* Modal */}
